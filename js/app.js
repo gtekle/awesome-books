@@ -18,7 +18,7 @@ let books = [];
 
 function* idMaker() {
   let id = 0;
-  while (true) yield id++;
+  while (true) yield (id += 1);
 }
 
 const id = idMaker();
@@ -29,20 +29,22 @@ function Book(title, author) {
   this.author = author;
 }
 
+let removeBtns;
+
 function displayBooks(books) {
   booksList.innerHTML = '';
   if (books.length === 0) {
-    let emptyMessage = document.createElement('p');
+    const emptyMessage = document.createElement('p');
     emptyMessage.textContent = 'No books found!';
     booksList.appendChild(emptyMessage);
   } else {
     books.forEach((book) => {
-      let bookHTML = document.createElement('div');
+      const bookHTML = document.createElement('div');
       bookHTML.className = 'book';
       bookHTML.innerHTML = `
         <p>${book.title}</p>
         <p>${book.author}</p>
-        <button type='button' onClick=removeBook(${book.id}) class="btn btn-remove" id='remove-book-${book.id}'>Remove</button>
+        <button type='button' class="btn btn-remove" id='remove-book-${book.id}'>Remove</button>
         <hr />
         `;
       booksList.appendChild(bookHTML);
@@ -52,18 +54,38 @@ function displayBooks(books) {
 
 const form = document.getElementById('create-form');
 
+function saveBooks() {
+  localStorage.setItem('books', JSON.stringify(books));
+}
+
+function removeBook(id) {
+  books = books.filter((book) => book.id !== id);
+  displayBooks(books);
+  removeBtns = document.querySelectorAll('.btn-remove');
+  saveBooks();
+}
+
+function checkRemoveButtonClickEvent() {
+  removeBtns.forEach((removeBtn) => {
+    let id;
+    removeBtn.addEventListener('click', (event) => {
+      const idStr = event.target.id;
+      id = parseInt(idStr.substring(idStr.length - 1), 10);
+      removeBook(id);
+      checkRemoveButtonClickEvent();
+    });
+  });
+}
+
 function addBook(title, author) {
-  let book = new Book(title, author);
+  const book = new Book(title, author);
   books.push(book);
   displayBooks(books);
+  removeBtns = document.querySelectorAll('.btn-remove');
 }
 
 function saveFormData(book) {
   localStorage.setItem('formData', JSON.stringify(book));
-}
-
-function saveBooks() {
-  localStorage.setItem('books', JSON.stringify(books));
 }
 
 form.addEventListener('submit', (event) => {
@@ -72,13 +94,8 @@ form.addEventListener('submit', (event) => {
   addBook(title.value, author.value);
   saveFormData({ title: title.value, author: author.value });
   saveBooks();
+  checkRemoveButtonClickEvent();
 });
-
-function removeBook(id) {
-  books = books.filter((book) => book.id !== id);
-  displayBooks(books);
-  saveBooks();
-}
 
 function checkBooks() {
   if (localStorage.getItem('books')) {
@@ -89,8 +106,8 @@ function checkBooks() {
 function checkFormData() {
   const { title, author } = form.elements;
   if (localStorage.getItem('formData')) {
-    title.value = JSON.parse(localStorage.getItem('formData'))['title'];
-    author.value = JSON.parse(localStorage.getItem('formData'))['author'];
+    title.value = JSON.parse(localStorage.getItem('formData')).title;
+    author.value = JSON.parse(localStorage.getItem('formData')).author;
   }
 }
 
@@ -98,4 +115,6 @@ window.addEventListener('load', () => {
   checkFormData();
   checkBooks();
   displayBooks(books);
+  removeBtns = document.querySelectorAll('.btn-remove');
+  checkRemoveButtonClickEvent();
 });
