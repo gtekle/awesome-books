@@ -2,6 +2,7 @@ const main = document.getElementById('main');
 const sectionTitle = document.createElement('h1');
 const booksList = document.createElement('div');
 const createForm = document.createElement('form');
+createForm.setAttribute('id', 'create-form');
 
 sectionTitle.textContent = 'Awesome books';
 
@@ -28,20 +29,13 @@ function Book(title, author) {
   this.author = author;
 }
 
-// let book1 = new Book('Venezuela History', 'Angel');
-// let book2 = new Book('To be and not to be', 'William Shakespear');
-// let book3 = new Book(' and not to be', 'William Shakespear');
-// books.push(book1, book2, book3);
-
 function displayBooks(books) {
   if (books.length === 0) {
     let emptyMessage = document.createElement('p');
     emptyMessage.textContent = 'No books found!';
-    console.log('no book found!');
     booksList.appendChild(emptyMessage);
   } else {
     books.forEach((book) => {
-      console.log(book);
       let bookHTML = document.createElement('div');
       bookHTML.className = 'book';
       bookHTML.innerHTML = `
@@ -56,3 +50,17 @@ function displayBooks(books) {
 }
 
 displayBooks(books);
+
+const form = document.getElementById('create-form');
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const { title, author } = form.elements;
+  let book = new Book(title.value, author.value);
+  books.push(book);
+  booksList.innerHTML = '';
+  displayBooks(books);
+
+})
+
+
