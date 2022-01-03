@@ -14,7 +14,7 @@ main.appendChild(sectionTitle);
 main.appendChild(booksList);
 main.appendChild(createForm);
 
-const books = [];
+let books = [];
 
 function* idMaker() {
   let id = 0;
@@ -35,13 +35,14 @@ function displayBooks(books) {
     emptyMessage.textContent = 'No books found!';
     booksList.appendChild(emptyMessage);
   } else {
+    booksList.innerHTML = '';
     books.forEach((book) => {
       let bookHTML = document.createElement('div');
       bookHTML.className = 'book';
       bookHTML.innerHTML = `
         <p>${book.title}</p>
         <p>${book.author}</p>
-        <button type='button'>Remove</button>
+        <button type='button' onClick=removeBook(${book.id}) class="btn btn-remove" id='remove-book-${book.id}'>Remove</button>
         <hr />
         `;
       booksList.appendChild(bookHTML);
@@ -49,18 +50,23 @@ function displayBooks(books) {
   }
 }
 
-displayBooks(books);
-
 const form = document.getElementById('create-form');
+
+function addBook(title, author) {
+  let book = new Book(title, author);
+  books.push(book);
+  displayBooks(books);
+}
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   const { title, author } = form.elements;
-  let book = new Book(title.value, author.value);
-  books.push(book);
-  booksList.innerHTML = '';
+  addBook(title.value, author.value);
+});
+
+function removeBook(id) {
+  books = books.filter((book) => book.id !== id);
   displayBooks(books);
+}
 
-})
-
-
+displayBooks(books);
