@@ -30,12 +30,12 @@ function Book(title, author) {
 }
 
 function displayBooks(books) {
+  booksList.innerHTML = '';
   if (books.length === 0) {
     let emptyMessage = document.createElement('p');
     emptyMessage.textContent = 'No books found!';
     booksList.appendChild(emptyMessage);
   } else {
-    booksList.innerHTML = '';
     books.forEach((book) => {
       let bookHTML = document.createElement('div');
       bookHTML.className = 'book';
@@ -58,6 +58,10 @@ function addBook(title, author) {
   displayBooks(books);
 }
 
+function saveFormData(book) {
+  localStorage.setItem('formData', JSON.stringify(book));
+}
+
 function saveBooks() {
   localStorage.setItem('books', JSON.stringify(books));
 }
@@ -66,6 +70,7 @@ form.addEventListener('submit', (event) => {
   event.preventDefault();
   const { title, author } = form.elements;
   addBook(title.value, author.value);
+  saveFormData({ title: title.value, author: author.value });
   saveBooks();
 });
 
@@ -81,7 +86,16 @@ function checkBooks() {
   }
 }
 
+function checkFormData() {
+  const { title, author } = form.elements;
+  if (localStorage.getItem('formData')) {
+    title.value = JSON.parse(localStorage.getItem('formData'))['title'];
+    author.value = JSON.parse(localStorage.getItem('formData'))['author'];
+  }
+}
+
 window.addEventListener('load', () => {
-  checkBooks()
+  checkFormData();
+  checkBooks();
   displayBooks(books);
 });
