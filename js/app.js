@@ -58,15 +58,30 @@ function addBook(title, author) {
   displayBooks(books);
 }
 
+function saveBooks() {
+  localStorage.setItem('books', JSON.stringify(books));
+}
+
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   const { title, author } = form.elements;
   addBook(title.value, author.value);
+  saveBooks();
 });
 
 function removeBook(id) {
   books = books.filter((book) => book.id !== id);
   displayBooks(books);
+  saveBooks();
 }
 
-displayBooks(books);
+function checkBooks() {
+  if (localStorage.getItem('books')) {
+    books = JSON.parse(localStorage.getItem('books'));
+  }
+}
+
+window.addEventListener('load', () => {
+  checkBooks()
+  displayBooks(books);
+});
