@@ -29,6 +29,10 @@ class BookList {
     }
   }
 
+  saveBooks() {
+    localStorage.setItem('books', JSON.stringify(bookList.books));
+  }
+
   displayBooks() {
     booksList.innerHTML = '';
     if (this.books.length === 0) {
@@ -80,19 +84,15 @@ class Book {
   addBook() {
     bookList.books.push(this);
     localStorage.setItem('bookId', this.id);
-    this.saveBooks();
+    bookList.saveBooks();
     bookList.displayBooks();
   }
 
   removeBook(id) {
     bookList.books = bookList.books.filter((book) => book.id !== id);
-    this.saveBooks();
+    bookList.saveBooks();
   }
 
-  saveBooks() {
-    localStorage.setItem('books', JSON.stringify(bookList.books));
-  }
-  
 }
 
 const form = document.getElementById('create-form');
