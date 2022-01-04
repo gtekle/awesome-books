@@ -1,17 +1,21 @@
 const main = document.getElementById('main');
 const sectionTitle = document.createElement('h1');
 const booksList = document.createElement('div');
+booksList.className = 'books-container';
 const createForm = document.createElement('form');
 createForm.setAttribute('id', 'create-form');
+const divisor = document.createElement('div');
+divisor.className = 'divisor';
 
 sectionTitle.textContent = 'Awesome books';
 
-createForm.innerHTML = `<div><input name="title" type="text" placeholder="title" id="title" required></div>
-<div><input name="author" type="text" placeholder="author" id="author" required></div>
-<div><button type="submit" id="form-button">Add</button></div>`;
+createForm.innerHTML = `<h2>Add a new book</h2><input name="title" type="text" placeholder="title" id="title" required>
+<input name="author" type="text" placeholder="author" id="author" required>
+<button type="submit" id="form-button" class="clickeable btn">Add</button>`;
 
 main.appendChild(sectionTitle);
 main.appendChild(booksList);
+main.appendChild(divisor);
 main.appendChild(createForm);
 
 let books = [];
@@ -54,24 +58,20 @@ function displayBooks(books) {
       const bookHTML = document.createElement('div');
       bookHTML.className = 'book';
       bookHTML.innerHTML = `
-        <p>${book.title}</p>
-        <p>${book.author}</p>
-        <hr>`;
+        <p><q>${book.title}</q> by ${book.author}</p>`;
       const removeBtn = document.createElement('button');
       removeBtn.setAttribute(
         'type',
         'button',
-        'class',
-        'btn btn-remove',
-        'id',
-        `remove-book-${book.id}`,
       );
+      removeBtn.id = `remove-book-${book.id}`;
+      removeBtn.classList.add('btn', 'btn-remove', 'clickeable');
       removeBtn.innerHTML = 'Remove';
       removeBtn.addEventListener('click', () => {
         removeBook(book.id);
         removeBtn.parentElement.remove();
       });
-      bookHTML.insertBefore(removeBtn, bookHTML.children[2]);
+      bookHTML.appendChild(removeBtn);
       booksList.appendChild(bookHTML);
     });
   }
