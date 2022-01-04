@@ -30,6 +30,14 @@ function* idMaker() {
 
 const id = idMaker();
 
+class BookList {
+  constructor() {
+    this.books = [];
+  }
+}
+
+const bookList = new BookList();
+
 class Book {
   constructor(title, author) {
     this.id = id.next().value;
@@ -38,14 +46,14 @@ class Book {
   }
 
   addBook() {
-    books.push(this);
+    bookList.books.push(this);
     localStorage.setItem('bookId', this.id);
     this.saveBooks();
-    displayBooks(books);
+    displayBooks(bookList.books);
   }
 
   removeBook(id) {
-    books = books.filter((book) => book.id !== id);
+    bookList.books = bookList.books.filter((book) => book.id !== id);
     this.saveBooks();
   }
 
@@ -53,8 +61,6 @@ class Book {
     localStorage.setItem('books', JSON.stringify(books));
   }
 }
-
-this.books = [];
 
 function displayBooks(books) {
   booksList.innerHTML = '';
@@ -94,7 +100,6 @@ form.addEventListener('submit', (event) => {
   event.preventDefault();
   const { title, author } = form.elements;
   const newBook = new Book(title.value, author.value);
-  console.log(newBook);
   newBook.addBook();
   saveFormData({ title: title.value, author: author.value });
 });
