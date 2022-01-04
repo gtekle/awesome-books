@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 const main = document.getElementById('main');
 const sectionTitle = document.createElement('h1');
 const booksList = document.createElement('div');
@@ -25,40 +26,12 @@ class BookList {
 
   checkBooks() {
     if (localStorage.getItem('books')) {
-      bookList.books = JSON.parse(localStorage.getItem('books'));
+      this.books = JSON.parse(localStorage.getItem('books'));
     }
   }
 
   saveBooks() {
-    localStorage.setItem('books', JSON.stringify(bookList.books));
-  }
-
-  displayBooks() {
-    booksList.innerHTML = '';
-    if (this.books.length === 0) {
-      const emptyMessage = document.createElement('p');
-      emptyMessage.textContent = 'No books found!';
-      booksList.appendChild(emptyMessage);
-    } else {
-      this.books.forEach((book) => {
-        const bookHTML = document.createElement('div');
-        bookHTML.className = 'book';
-        bookHTML.innerHTML = `
-          <p><q>${book.title}</q> by ${book.author}</p>`;
-        const removeBtn = document.createElement('button');
-        removeBtn.setAttribute('type', 'button');
-        removeBtn.id = `remove-book-${book.id}`;
-        removeBtn.classList.add('btn', 'btn-remove', 'clickeable');
-        removeBtn.innerHTML = 'Remove';
-        removeBtn.addEventListener('click', () => {
-          const targetBook = new Book();
-          targetBook.removeBook(this.books.find((item) => item.id === book.id).id);
-          removeBtn.parentElement.remove();
-        });
-        bookHTML.appendChild(removeBtn);
-        booksList.appendChild(bookHTML);
-      });
-    }
+    localStorage.setItem('books', JSON.stringify(this.books));
   }
 }
 
@@ -71,6 +44,7 @@ class Book {
     this.author = author;
   }
 
+  // eslint-disable-next-line
   * idMaker() {
     let id;
     if (localStorage.getItem('bookId')) {
@@ -85,14 +59,43 @@ class Book {
     bookList.books.push(this);
     localStorage.setItem('bookId', this.id);
     bookList.saveBooks();
-    bookList.displayBooks();
+    this.displayBooks();
   }
 
+  // eslint-disable-next-line
   removeBook(id) {
     bookList.books = bookList.books.filter((book) => book.id !== id);
     bookList.saveBooks();
   }
 
+  displayBooks() {
+    booksList.innerHTML = '';
+    if (bookList.books.length === 0) {
+      const emptyMessage = document.createElement('p');
+      emptyMessage.textContent = 'No books found!';
+      booksList.appendChild(emptyMessage);
+    } else {
+      bookList.books.forEach((book) => {
+        const bookHTML = document.createElement('div');
+        bookHTML.className = 'book';
+        bookHTML.innerHTML = `
+          <p><q>${book.title}</q> by ${book.author}</p>`;
+        const removeBtn = document.createElement('button');
+        removeBtn.setAttribute('type', 'button');
+        removeBtn.id = `remove-book-${book.id}`;
+        removeBtn.classList.add('btn', 'btn-remove', 'clickeable');
+        removeBtn.innerHTML = 'Remove';
+        removeBtn.addEventListener('click', () => {
+          this.removeBook(
+            bookList.books.find((item) => item.id === book.id).id,
+          );
+          removeBtn.parentElement.remove();
+        });
+        bookHTML.appendChild(removeBtn);
+        booksList.appendChild(bookHTML);
+      });
+    }
+  }
 }
 
 const form = document.getElementById('create-form');
@@ -120,5 +123,6 @@ function checkFormData() {
 window.addEventListener('DOMContentLoaded', () => {
   checkFormData();
   bookList.checkBooks();
-  bookList.displayBooks();
+  const book = new Book();
+  book.displayBooks();
 });
