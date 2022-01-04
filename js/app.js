@@ -18,21 +18,16 @@ main.appendChild(booksList);
 main.appendChild(divisor);
 main.appendChild(createForm);
 
-function* idMaker() {
-  let id;
-  if (localStorage.getItem('bookId')) {
-    id = parseInt(localStorage.getItem('bookId'), 10);
-  } else {
-    id = 0;
-  }
-  while (true) yield (id += 1);
-}
-
-const id = idMaker();
-
 class BookList {
   constructor() {
     this.books = [];
+  }
+
+  checkBooks() {
+    if (localStorage.getItem('books')) {
+      bookList.books = JSON.parse(localStorage.getItem('books'));
+    }
+
   }
 }
 
@@ -40,9 +35,19 @@ const bookList = new BookList();
 
 class Book {
   constructor(title, author) {
-    this.id = id.next().value;
+    this.id = this.idMaker().next().value;
     this.title = title;
     this.author = author;
+  }
+
+  * idMaker() {
+    let id;
+    if (localStorage.getItem('bookId')) {
+      id = parseInt(localStorage.getItem('bookId'), 10);
+    } else {
+      id = 0;
+    }
+    while (true) yield (id += 1);
   }
 
   addBook() {
@@ -58,8 +63,9 @@ class Book {
   }
 
   saveBooks() {
-    localStorage.setItem('books', JSON.stringify(books));
+    localStorage.setItem('books', JSON.stringify(bookList.books));
   }
+  
 }
 
 function displayBooks(books) {
@@ -104,12 +110,6 @@ form.addEventListener('submit', (event) => {
   saveFormData({ title: title.value, author: author.value });
 });
 
-function checkBooks() {
-  if (localStorage.getItem('books')) {
-    books = JSON.parse(localStorage.getItem('books'));
-  }
-}
-
 function checkFormData() {
   const { title, author } = form.elements;
   if (localStorage.getItem('formData')) {
@@ -120,6 +120,6 @@ function checkFormData() {
 
 window.addEventListener('DOMContentLoaded', () => {
   checkFormData();
-  checkBooks();
-  displayBooks(books);
+  bookList.checkBooks();
+  displayBooks(bookList.books);
 });
