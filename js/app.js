@@ -34,19 +34,24 @@ let removeBtns;
 function displayBooks(books) {
   booksList.innerHTML = '';
   if (books.length === 0) {
-    const emptyMessage = document.createElement('p');
+    let emptyMessage = document.createElement('p');
     emptyMessage.textContent = 'No books found!';
     booksList.appendChild(emptyMessage);
   } else {
     books.forEach((book) => {
-      const bookHTML = document.createElement('div');
+      let bookHTML = document.createElement('div');
       bookHTML.className = 'book';
       bookHTML.innerHTML = `
         <p>${book.title}</p>
         <p>${book.author}</p>
-        <button type='button' class="btn btn-remove" id='remove-book-${book.id}'>Remove</button>
-        <hr />
-        `;
+        <hr>`;
+      let removeBtn = document.createElement('button');
+      removeBtn.setAttribute('type', 'button','class', 'btn btn-remove', 'id', `remove-book-${book.id}`);
+      removeBtn.innerHTML = 'Remove';
+      removeBtn.addEventListener('click', () => {
+        removeBook(book.id);
+      })
+      bookHTML.insertBefore(removeBtn, bookHTML.children[2]);
       booksList.appendChild(bookHTML);
     });
   }
@@ -63,18 +68,6 @@ function removeBook(id) {
   displayBooks(books);
   removeBtns = document.querySelectorAll('.btn-remove');
   saveBooks();
-}
-
-function checkRemoveButtonClickEvent() {
-  removeBtns.forEach((removeBtn) => {
-    let id;
-    removeBtn.addEventListener('click', (event) => {
-      const idStr = event.target.id;
-      id = parseInt(idStr.substring(idStr.length - 1), 10);
-      removeBook(id);
-      checkRemoveButtonClickEvent();
-    });
-  });
 }
 
 function addBook(title, author) {
@@ -94,7 +87,6 @@ form.addEventListener('submit', (event) => {
   addBook(title.value, author.value);
   saveFormData({ title: title.value, author: author.value });
   saveBooks();
-  checkRemoveButtonClickEvent();
 });
 
 function checkBooks() {
@@ -116,5 +108,4 @@ window.addEventListener('load', () => {
   checkBooks();
   displayBooks(books);
   removeBtns = document.querySelectorAll('.btn-remove');
-  checkRemoveButtonClickEvent();
 });
