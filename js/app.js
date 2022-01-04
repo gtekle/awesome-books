@@ -18,8 +18,6 @@ main.appendChild(booksList);
 main.appendChild(divisor);
 main.appendChild(createForm);
 
-let books = [];
-
 function* idMaker() {
   let id;
   if (localStorage.getItem('bookId')) {
@@ -32,20 +30,31 @@ function* idMaker() {
 
 const id = idMaker();
 
-function Book(title, author) {
-  this.id = id.next().value;
-  this.title = title;
-  this.author = author;
+class Book {
+  constructor(title, author) {
+    this.id = id.next().value;
+    this.title = title;
+    this.author = author;
+  }
+
+  addBook() {
+    books.push(this);
+    localStorage.setItem('bookId', this.id);
+    this.saveBooks();
+    displayBooks(books);
+  }
+
+  removeBook(id) {
+    books = books.filter((book) => book.id !== id);
+    this.saveBooks();
+  }
+
+  saveBooks() {
+    localStorage.setItem('books', JSON.stringify(books));
+  }
 }
 
-function saveBooks() {
-  localStorage.setItem('books', JSON.stringify(books));
-}
-
-function removeBook(id) {
-  books = books.filter((book) => book.id !== id);
-  saveBooks();
-}
+this.books = [];
 
 function displayBooks(books) {
   booksList.innerHTML = '';
@@ -60,15 +69,13 @@ function displayBooks(books) {
       bookHTML.innerHTML = `
         <p><q>${book.title}</q> by ${book.author}</p>`;
       const removeBtn = document.createElement('button');
-      removeBtn.setAttribute(
-        'type',
-        'button',
-      );
+      removeBtn.setAttribute('type', 'button');
       removeBtn.id = `remove-book-${book.id}`;
       removeBtn.classList.add('btn', 'btn-remove', 'clickeable');
       removeBtn.innerHTML = 'Remove';
       removeBtn.addEventListener('click', () => {
-        removeBook(book.id);
+        const targetBook = new Book();
+        targetBook.removeBook(books.find((item) => item.id === book.id).id);
         removeBtn.parentElement.remove();
       });
       bookHTML.appendChild(removeBtn);
@@ -79,13 +86,6 @@ function displayBooks(books) {
 
 const form = document.getElementById('create-form');
 
-function addBook(title, author) {
-  const book = new Book(title, author);
-  books.push(book);
-  localStorage.setItem('bookId', book.id);
-  displayBooks(books);
-}
-
 function saveFormData(book) {
   localStorage.setItem('formData', JSON.stringify(book));
 }
@@ -93,9 +93,10 @@ function saveFormData(book) {
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   const { title, author } = form.elements;
-  addBook(title.value, author.value);
+  const newBook = new Book(title.value, author.value);
+  console.log(newBook);
+  newBook.addBook();
   saveFormData({ title: title.value, author: author.value });
-  saveBooks();
 });
 
 function checkBooks() {
