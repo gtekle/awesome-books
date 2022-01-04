@@ -17,7 +17,12 @@ main.appendChild(createForm);
 let books = [];
 
 function* idMaker() {
-  let id = 0;
+  let id;
+  if (localStorage.getItem('bookId')) {
+    id = parseInt(localStorage.getItem('bookId'), 10);
+  } else {
+    id = 0;
+  }
   while (true) yield (id += 1);
 }
 
@@ -46,11 +51,18 @@ function displayBooks(books) {
         <p>${book.author}</p>
         <hr>`;
       let removeBtn = document.createElement('button');
-      removeBtn.setAttribute('type', 'button','class', 'btn btn-remove', 'id', `remove-book-${book.id}`);
+      removeBtn.setAttribute(
+        'type',
+        'button',
+        'class',
+        'btn btn-remove',
+        'id',
+        `remove-book-${book.id}`
+      );
       removeBtn.innerHTML = 'Remove';
       removeBtn.addEventListener('click', () => {
         removeBook(book.id);
-      })
+      });
       bookHTML.insertBefore(removeBtn, bookHTML.children[2]);
       booksList.appendChild(bookHTML);
     });
@@ -73,6 +85,7 @@ function removeBook(id) {
 function addBook(title, author) {
   const book = new Book(title, author);
   books.push(book);
+  localStorage.setItem('bookId', book.id);
   displayBooks(books);
   removeBtns = document.querySelectorAll('.btn-remove');
 }
