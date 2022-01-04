@@ -34,34 +34,42 @@ function Book(title, author) {
   this.author = author;
 }
 
-let removeBtns;
+function saveBooks() {
+  localStorage.setItem('books', JSON.stringify(books));
+}
+
+function removeBook(id) {
+  books = books.filter((book) => book.id !== id);
+  saveBooks();
+}
 
 function displayBooks(books) {
   booksList.innerHTML = '';
   if (books.length === 0) {
-    let emptyMessage = document.createElement('p');
+    const emptyMessage = document.createElement('p');
     emptyMessage.textContent = 'No books found!';
     booksList.appendChild(emptyMessage);
   } else {
     books.forEach((book) => {
-      let bookHTML = document.createElement('div');
+      const bookHTML = document.createElement('div');
       bookHTML.className = 'book';
       bookHTML.innerHTML = `
         <p>${book.title}</p>
         <p>${book.author}</p>
         <hr>`;
-      let removeBtn = document.createElement('button');
+      const removeBtn = document.createElement('button');
       removeBtn.setAttribute(
         'type',
         'button',
         'class',
         'btn btn-remove',
         'id',
-        `remove-book-${book.id}`
+        `remove-book-${book.id}`,
       );
       removeBtn.innerHTML = 'Remove';
       removeBtn.addEventListener('click', () => {
         removeBook(book.id);
+        removeBtn.parentElement.remove();
       });
       bookHTML.insertBefore(removeBtn, bookHTML.children[2]);
       booksList.appendChild(bookHTML);
@@ -71,23 +79,11 @@ function displayBooks(books) {
 
 const form = document.getElementById('create-form');
 
-function saveBooks() {
-  localStorage.setItem('books', JSON.stringify(books));
-}
-
-function removeBook(id) {
-  books = books.filter((book) => book.id !== id);
-  displayBooks(books);
-  removeBtns = document.querySelectorAll('.btn-remove');
-  saveBooks();
-}
-
 function addBook(title, author) {
   const book = new Book(title, author);
   books.push(book);
   localStorage.setItem('bookId', book.id);
   displayBooks(books);
-  removeBtns = document.querySelectorAll('.btn-remove');
 }
 
 function saveFormData(book) {
@@ -116,9 +112,8 @@ function checkFormData() {
   }
 }
 
-window.addEventListener('load', () => {
+window.addEventListener('DOMContentLoaded', () => {
   checkFormData();
   checkBooks();
   displayBooks(books);
-  removeBtns = document.querySelectorAll('.btn-remove');
 });
