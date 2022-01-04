@@ -5,3 +5,90 @@
   margin: 0;
   padding: 0;
 }
+
+.btn {
+  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: rgb(235, 235, 235);
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 15%;
+  text-align: center;
+  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+}
+
+.books-container {
+  width: 100%;
+  display: flex;
+  margin: 18px 0;
+  flex-direction: column;
+  border: solid 3px darkgray;
+}
+
+.book {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 7px;
+  font-weight: bold;
+}
+
+.book:nth-child(even) {
+  background-color: rgb(235, 235, 235);
+}
+
+.book:first-child {
+  padding-top: 7px;
+}
+
+.book:last-child {
+  padding-bottom: 7px;
+}
+
+.btn-remove {
+  align-self: flex-end;
+  padding: 3px 7px;
+  border: 1px solid red;
+  box-shadow: 3px 3px 0 0 #7c7c7c;
+  color: red;
+}
+
+.clickeable {
+  cursor: pointer;
+}
+
+#create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 50%;
+}
+
+#create-form input {
+  font-size: 20px;
+  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+  padding: 1px 1px;
+}
+
+#form-button {
+  font-size: 20px;
+  align-self: flex-end;
+  padding: 3px 7px;
+  border: 1px solid rgb(0, 168, 0);
+  box-shadow: 3px 3px 0 0 #7c7c7c;
+}
+
+.divisor {
+  width: 30%;
+  margin-bottom: 12px;
+  border: none;
+  border-bottom: 2px solid darkgray;
+}

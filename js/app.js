@@ -1,90 +1,104 @@
+/* eslint-disable max-classes-per-file */
 const main = document.getElementById('main');
 const sectionTitle = document.createElement('h1');
 const booksList = document.createElement('div');
+booksList.className = 'books-container';
 const createForm = document.createElement('form');
 createForm.setAttribute('id', 'create-form');
+const divisor = document.createElement('div');
+divisor.className = 'divisor';
 
 sectionTitle.textContent = 'Awesome books';
 
-createForm.innerHTML = `<div><input name="title" type="text" placeholder="title" id="title" required></div>
-<div><input name="author" type="text" placeholder="author" id="author" required></div>
-<div><button type="submit" id="form-button">Add</button></div>`;
+createForm.innerHTML = `<h2>Add a new book</h2><input name="title" type="text" placeholder="title" id="title" required>
+<input name="author" type="text" placeholder="author" id="author" required>
+<button type="submit" id="form-button" class="clickeable btn">Add</button>`;
 
 main.appendChild(sectionTitle);
 main.appendChild(booksList);
+main.appendChild(divisor);
 main.appendChild(createForm);
 
-let books = [];
-
-function* idMaker() {
-  let id;
-  if (localStorage.getItem('bookId')) {
-    id = parseInt(localStorage.getItem('bookId'), 10);
-  } else {
-    id = 0;
+class BookList {
+  constructor() {
+    this.books = [];
   }
-  while (true) yield (id += 1);
+
+  checkBooks() {
+    if (localStorage.getItem('books')) {
+      this.books = JSON.parse(localStorage.getItem('books'));
+    }
+  }
+
+  saveBooks() {
+    localStorage.setItem('books', JSON.stringify(this.books));
+  }
 }
 
-const id = idMaker();
+const bookList = new BookList();
 
-function Book(title, author) {
-  this.id = id.next().value;
-  this.title = title;
-  this.author = author;
-}
+class Book {
+  constructor(title, author) {
+    this.id = this.idMaker().next().value;
+    this.title = title;
+    this.author = author;
+  }
 
-function saveBooks() {
-  localStorage.setItem('books', JSON.stringify(books));
-}
+  // eslint-disable-next-line
+  * idMaker() {
+    let id;
+    if (localStorage.getItem('bookId')) {
+      id = parseInt(localStorage.getItem('bookId'), 10);
+    } else {
+      id = 0;
+    }
+    while (true) yield (id += 1);
+  }
 
-function removeBook(id) {
-  books = books.filter((book) => book.id !== id);
-  saveBooks();
-}
+  addBook() {
+    bookList.books.push(this);
+    localStorage.setItem('bookId', this.id);
+    bookList.saveBooks();
+    this.displayBooks();
+  }
 
-function displayBooks(books) {
-  booksList.innerHTML = '';
-  if (books.length === 0) {
-    const emptyMessage = document.createElement('p');
-    emptyMessage.textContent = 'No books found!';
-    booksList.appendChild(emptyMessage);
-  } else {
-    books.forEach((book) => {
-      const bookHTML = document.createElement('div');
-      bookHTML.className = 'book';
-      bookHTML.innerHTML = `
-        <p>${book.title}</p>
-        <p>${book.author}</p>
-        <hr>`;
-      const removeBtn = document.createElement('button');
-      removeBtn.setAttribute(
-        'type',
-        'button',
-        'class',
-        'btn btn-remove',
-        'id',
-        `remove-book-${book.id}`,
-      );
-      removeBtn.innerHTML = 'Remove';
-      removeBtn.addEventListener('click', () => {
-        removeBook(book.id);
-        removeBtn.parentElement.remove();
+  // eslint-disable-next-line
+  removeBook(id) {
+    bookList.books = bookList.books.filter((book) => book.id !== id);
+    bookList.saveBooks();
+  }
+
+  displayBooks() {
+    booksList.innerHTML = '';
+    if (bookList.books.length === 0) {
+      const emptyMessage = document.createElement('p');
+      emptyMessage.textContent = 'No books found!';
+      booksList.appendChild(emptyMessage);
+    } else {
+      bookList.books.forEach((book) => {
+        const bookHTML = document.createElement('div');
+        bookHTML.className = 'book';
+        bookHTML.innerHTML = `
+          <p><q>${book.title}</q> by ${book.author}</p>`;
+        const removeBtn = document.createElement('button');
+        removeBtn.setAttribute('type', 'button');
+        removeBtn.id = `remove-book-${book.id}`;
+        removeBtn.classList.add('btn', 'btn-remove', 'clickeable');
+        removeBtn.innerHTML = 'Remove';
+        removeBtn.addEventListener('click', () => {
+          this.removeBook(
+            bookList.books.find((item) => item.id === book.id).id,
+          );
+          removeBtn.parentElement.remove();
+        });
+        bookHTML.appendChild(removeBtn);
+        booksList.appendChild(bookHTML);
       });
-      bookHTML.insertBefore(removeBtn, bookHTML.children[2]);
-      booksList.appendChild(bookHTML);
-    });
+    }
   }
 }
 
 const form = document.getElementById('create-form');
-
-function addBook(title, author) {
-  const book = new Book(title, author);
-  books.push(book);
-  localStorage.setItem('bookId', book.id);
-  displayBooks(books);
-}
 
 function saveFormData(book) {
   localStorage.setItem('formData', JSON.stringify(book));
@@ -93,16 +107,10 @@ function saveFormData(book) {
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   const { title, author } = form.elements;
-  addBook(title.value, author.value);
+  const newBook = new Book(title.value, author.value);
+  newBook.addBook();
   saveFormData({ title: title.value, author: author.value });
-  saveBooks();
 });
-
-function checkBooks() {
-  if (localStorage.getItem('books')) {
-    books = JSON.parse(localStorage.getItem('books'));
-  }
-}
 
 function checkFormData() {
   const { title, author } = form.elements;
@@ -114,6 +122,7 @@ function checkFormData() {
 
 window.addEventListener('DOMContentLoaded', () => {
   checkFormData();
-  checkBooks();
-  displayBooks(books);
+  bookList.checkBooks();
+  const book = new Book();
+  book.displayBooks();
 });
