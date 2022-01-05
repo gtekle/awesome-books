@@ -44,6 +44,11 @@ ul {
   margin: 5px auto;
 }
 
+#header img {
+  width: 8%;
+  height: auto;
+}
+
 #nav-list {
   justify-content: center;
   align-items: center;
