@@ -19,7 +19,8 @@ function populateAddBookSection() {
   form.innerHTML =
     `<input name="title" type="text" placeholder="title" id="title" required>
     <input name="author" type="text" placeholder="author" id="author" required>
-    <button type="submit" id="form-button" class="clickeable btn">Add</button>`;
+    <button type="submit" id="form-button" class="clickeable btn">Add</button>
+    <div id="success-msg"></div>`;
 
   addBookSection.appendChild(addBookSectionTitle);
   addBookSection.appendChild(form);
@@ -28,12 +29,21 @@ function populateAddBookSection() {
     localStorage.setItem('formData', JSON.stringify(book));
   }
 
+  function displaySuccess() {
+    const successMsg = document.getElementById('success-msg');
+    successMsg.textContent = 'Your book has been added!';
+    setTimeout( () => {
+      successMsg.textContent = ''
+    }, 3000); 
+  }
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const { title, author } = form.elements;
     const newBook = new Book(title.value, author.value);
     newBook.addBook();
     saveFormData({ title: title.value, author: author.value });
+    displaySuccess();
   });
 
   function checkFormData() {

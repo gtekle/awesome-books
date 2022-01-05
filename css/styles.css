@@ -169,6 +169,10 @@ ul {
   box-shadow: 3px 3px 0 0 #7c7c7c;
 }
 
+#success-msg {
+  color: rgb(0, 219, 0);
+}
+
 .divisor {
   width: 30%;
   margin-bottom: 12px;
