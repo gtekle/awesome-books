@@ -196,3 +196,22 @@ ul {
 .d-off {
   display: none;
 }
+
+@media screen and (max-width: 400px){
+
+  #header {
+    justify-content: center;
+  }
+
+  #logo {
+    display: none;
+  }
+
+  #main h1 {
+    margin-top: 20px;
+  }
+
+  #contact .section-title {
+    text-align: center;
+  }
+}
