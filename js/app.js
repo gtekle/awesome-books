@@ -149,20 +149,36 @@ class Book {
   }
 }
 
-// const form = document.getElementById('create-form');
-
-// function checkFormData() {
-//   const { title, author } = form.elements;
-//   if (localStorage.getItem('formData')) {
-//     title.value = JSON.parse(localStorage.getItem('formData')).title;
-//     author.value = JSON.parse(localStorage.getItem('formData')).author;
-//   }
-// }
-
 window.addEventListener('DOMContentLoaded', () => {
   populateMainSection();
   // checkFormData();
   bookList.checkBooks();
   const book = new Book();
   book.displayBooks();
+});
+
+const linkList = document.querySelector('#link-list');
+const linkAdd = document.querySelector('#link-add');
+const linkContact = document.querySelector('#link-contact');
+
+const linkItems = document.querySelectorAll('.nav-item');
+linkItems.forEach((item) => {
+  item.addEventListener('click', () => {
+
+    const activeLink = document.getElementById(item.id)
+ 
+    if (!activeLink.classList.contains('active')){
+      activeLink.classList.add('active')
+    }
+
+    linkItems.forEach((previousItem) => {
+      if (previousItem.id !== item.id && previousItem.classList.contains('active')){
+        previousItem.classList.remove('active');
+      }
+    })
+  })
+})
+
+linkContact.addEventListener('click', () => {
+  
 });

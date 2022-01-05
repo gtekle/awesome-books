@@ -55,8 +55,13 @@ ul {
 }
 
 .nav-item a:hover {
+  color: blue;
+}
+
+.active {
   color: red;
 }
+
 
 
 #main {
