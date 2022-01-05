@@ -2,22 +2,73 @@
 const main = document.getElementById('main');
 const sectionTitle = document.createElement('h1');
 const booksList = document.createElement('div');
-booksList.className = 'books-container';
-const createForm = document.createElement('form');
-createForm.setAttribute('id', 'create-form');
-const divisor = document.createElement('div');
-divisor.className = 'divisor';
 
-sectionTitle.textContent = 'Awesome books';
+function populateAddBookSection() {
+  const addBookSection = document.createElement('section');
+  const addBookSectionTitle = document.createElement('h2');
+  const form = document.createElement('form');
+  addBookSection.classList.add('add-book', 'd-flex', 'col', 'd-off');
+  addBookSectionTitle.textContent = 'Add a new book';
+  addBookSectionTitle.className = 'section-title';
+  form.id = 'create-form';
+  form.innerHTML =
+    `<input name="title" type="text" placeholder="title" id="title" required>
+    <input name="author" type="text" placeholder="author" id="author" required>
+    <button type="submit" id="form-button" class="clickeable btn">Add</button>`;
 
-createForm.innerHTML = `<h2>Add a new book</h2><input name="title" type="text" placeholder="title" id="title" required>
-<input name="author" type="text" placeholder="author" id="author" required>
-<button type="submit" id="form-button" class="clickeable btn">Add</button>`;
+  addBookSection.appendChild(addBookSectionTitle);
+  addBookSection.appendChild(form);
 
-main.appendChild(sectionTitle);
-main.appendChild(booksList);
-main.appendChild(divisor);
-main.appendChild(createForm);
+  function saveFormData(book) {
+    localStorage.setItem('formData', JSON.stringify(book));
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const { title, author } = form.elements;
+    const newBook = new Book(title.value, author.value);
+    newBook.addBook();
+    saveFormData({ title: title.value, author: author.value });
+  });
+
+  function checkFormData() {
+    const { title, author } = form.elements;
+    if (localStorage.getItem('formData')) {
+      title.value = JSON.parse(localStorage.getItem('formData')).title;
+      author.value = JSON.parse(localStorage.getItem('formData')).author;
+    }
+  }
+
+  checkFormData();
+
+  return addBookSection;
+}
+
+function populateContactSection() {
+  const contactSection = document.createElement('section');
+  contactSection.classList.add('contact-info', 'd-flex', 'col', 'd-off');
+  contactSection.innerHTML =
+    `<h2 class="section-title">Contact information</h2>
+     <p> Do you have a question or you just want to say <q>Hello</q>? <br />
+         You can reachout to us: </p>
+      <ul>
+        <li>Our e-mail: mail@mail.com</li>
+        <li>Our phome number: 0043586534422</li>
+        <li>Our address: Streetname 22, 84503 City, Country</li>
+      </ul>`;
+
+  return contactSection;
+}
+
+function populateMainSection() {
+  booksList.className = 'books-container';
+  sectionTitle.textContent = 'Awesome books';
+
+  main.appendChild(sectionTitle);
+  main.appendChild(booksList);
+  main.appendChild(populateAddBookSection());
+  main.appendChild(populateContactSection());
+}
 
 class BookList {
   constructor() {
@@ -98,30 +149,19 @@ class Book {
   }
 }
 
-const form = document.getElementById('create-form');
+// const form = document.getElementById('create-form');
 
-function saveFormData(book) {
-  localStorage.setItem('formData', JSON.stringify(book));
-}
-
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const { title, author } = form.elements;
-  const newBook = new Book(title.value, author.value);
-  newBook.addBook();
-  saveFormData({ title: title.value, author: author.value });
-});
-
-function checkFormData() {
-  const { title, author } = form.elements;
-  if (localStorage.getItem('formData')) {
-    title.value = JSON.parse(localStorage.getItem('formData')).title;
-    author.value = JSON.parse(localStorage.getItem('formData')).author;
-  }
-}
+// function checkFormData() {
+//   const { title, author } = form.elements;
+//   if (localStorage.getItem('formData')) {
+//     title.value = JSON.parse(localStorage.getItem('formData')).title;
+//     author.value = JSON.parse(localStorage.getItem('formData')).author;
+//   }
+// }
 
 window.addEventListener('DOMContentLoaded', () => {
-  checkFormData();
+  populateMainSection();
+  // checkFormData();
   bookList.checkBooks();
   const book = new Book();
   book.displayBooks();

@@ -60,7 +60,7 @@ ul {
 
 
 #main {
-  min-height: calc(100vh - 15vh) ;
+  min-height: calc(100vh - 16vh) ;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -144,4 +144,8 @@ ul {
   padding: 10px 20px;
   border: 2px solid black;
   margin: 5px auto;
+}
+
+.d-off {
+  display: none;
 }
