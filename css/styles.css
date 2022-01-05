@@ -16,6 +16,49 @@
   background-color: rgb(235, 235, 235);
 }
 
+.d-flex {
+  display: flex;
+}
+
+.col {
+  flex-direction: column;
+}
+
+.row {
+  flex-direction: row;
+}
+
+ul {
+  list-style: none;
+}
+
+#header {
+  width: 96%;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border: 2px solid black;
+  margin: 5px auto;
+}
+
+#nav-list {
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-item + .nav-item {
+  border-left: 2px solid black;
+}
+
+.nav-item {
+  padding: 0 8px;
+  text-align: center;
+}
+
+.nav-item a:hover {
+  color: red;
+}
+
+
 #main {
   display: flex;
   flex-direction: column;
