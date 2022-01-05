@@ -12,7 +12,7 @@ It is a project for Microverse's JavaScript Module to be done using pair-program
 
 ![Mobile Version](./assets/img/awesome-books-mobile-version.png)
 
-In this website you can add awesome books of your choice to the list of books and see the existing onces saved in your localstorage object.
+In this website you can add awesome books of your choice to the list of books and see the existing ones saved in your localstorage object.
 
 ## Built With
 
