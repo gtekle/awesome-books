@@ -2,11 +2,13 @@
 const main = document.getElementById('main');
 const sectionTitle = document.createElement('h1');
 const booksList = document.createElement('div');
+booksList.id = 'list';
 
 function populateAddBookSection() {
   const addBookSection = document.createElement('section');
   const addBookSectionTitle = document.createElement('h2');
   const form = document.createElement('form');
+  addBookSection.id = 'add';
   addBookSection.classList.add('add-book', 'd-flex', 'col', 'd-off');
   addBookSectionTitle.textContent = 'Add a new book';
   addBookSectionTitle.className = 'section-title';
@@ -46,6 +48,7 @@ function populateAddBookSection() {
 
 function populateContactSection() {
   const contactSection = document.createElement('section');
+  contactSection.id = 'contact';
   contactSection.classList.add('contact-info', 'd-flex', 'col', 'd-off');
   contactSection.innerHTML =
     `<h2 class="section-title">Contact information</h2>
@@ -151,34 +154,32 @@ class Book {
 
 window.addEventListener('DOMContentLoaded', () => {
   populateMainSection();
-  // checkFormData();
   bookList.checkBooks();
   const book = new Book();
   book.displayBooks();
 });
-
-const linkList = document.querySelector('#link-list');
-const linkAdd = document.querySelector('#link-add');
-const linkContact = document.querySelector('#link-contact');
 
 const linkItems = document.querySelectorAll('.nav-item');
 linkItems.forEach((item) => {
   item.addEventListener('click', () => {
 
     const activeLink = document.getElementById(item.id)
- 
-    if (!activeLink.classList.contains('active')){
+    const activeSection = document.getElementById(item.id.substring(5,))
+
+    if (!activeLink.classList.contains('active')) {
       activeLink.classList.add('active')
+      activeSection.classList.remove('d-off');
     }
 
     linkItems.forEach((previousItem) => {
-      if (previousItem.id !== item.id && previousItem.classList.contains('active')){
+      let hiddenSection = document.getElementById(previousItem.id.substring(5,))
+      console.log(hiddenSection.id);
+      if (previousItem.id !== item.id && previousItem.classList.contains('active')) {
         previousItem.classList.remove('active');
+      }
+      if (previousItem.id !== item.id && !hiddenSection.classList.contains('d-off')) {
+        hiddenSection.classList.add('d-off');
       }
     })
   })
 })
-
-linkContact.addEventListener('click', () => {
-  
-});
