@@ -60,6 +60,7 @@ ul {
 
 
 #main {
+  min-height: calc(100vh - 15vh) ;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -134,4 +135,13 @@ ul {
   margin-bottom: 12px;
   border: none;
   border-bottom: 2px solid darkgray;
+}
+
+#footer {
+  position: relative;
+  bottom: 0;
+  width: 96%;
+  padding: 10px 20px;
+  border: 2px solid black;
+  margin: 5px auto;
 }
