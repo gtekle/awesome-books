@@ -1,4 +1,7 @@
 /* eslint-disable max-classes-per-file */
+const currentDateTime = document.querySelector('.date-time');
+let currentDate = new Date();
+currentDateTime.textContent = currentDate.toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
 const main = document.getElementById('main');
 const sectionTitle = document.createElement('h1');
 const bookListSection = document.createElement('section');
@@ -32,9 +35,9 @@ function populateAddBookSection() {
   function displaySuccess() {
     const successMsg = document.getElementById('success-msg');
     successMsg.textContent = 'Your book has been added!';
-    setTimeout( () => {
+    setTimeout(() => {
       successMsg.textContent = ''
-    }, 3000); 
+    }, 3000);
   }
 
   form.addEventListener('submit', (event) => {
