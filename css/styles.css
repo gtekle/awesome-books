@@ -6,6 +6,10 @@
   padding: 0;
 }
 
+body {
+  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+}
+
 .btn {
   font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
   background-color: white;
@@ -71,7 +75,15 @@ ul {
   align-items: center;
   padding: 24px 15%;
   text-align: center;
-  font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+}
+
+#main h1 {
+  padding-bottom: 15px;
+}
+
+#list {
+  width: 100%;
+  padding-top: 30px;
 }
 
 .books-container {
@@ -114,17 +126,39 @@ ul {
   cursor: pointer;
 }
 
+#add {
+  padding-top: 30px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
 #create-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 50%;
+  width: 90%;
+  gap: 20px;
 }
 
 #create-form input {
   font-size: 20px;
   font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
   padding: 1px 1px;
+}
+
+#contact {
+  padding-top: 30px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  text-align: left;
+}
+
+#contact ul {
+  padding-left: 40px;
+  list-style: disc;
 }
 
 #form-button {

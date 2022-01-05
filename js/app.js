@@ -1,8 +1,11 @@
 /* eslint-disable max-classes-per-file */
 const main = document.getElementById('main');
 const sectionTitle = document.createElement('h1');
+const bookListSection = document.createElement('section');
 const booksList = document.createElement('div');
-booksList.id = 'list';
+bookListSection.id = 'list';
+bookListSection.innerHTML = "<h2>Book List</h2>";
+
 
 function populateAddBookSection() {
   const addBookSection = document.createElement('section');
@@ -68,7 +71,7 @@ function populateMainSection() {
   sectionTitle.textContent = 'Awesome books';
 
   main.appendChild(sectionTitle);
-  main.appendChild(booksList);
+  main.appendChild(bookListSection);
   main.appendChild(populateAddBookSection());
   main.appendChild(populateContactSection());
 }
@@ -148,6 +151,7 @@ class Book {
         bookHTML.appendChild(removeBtn);
         booksList.appendChild(bookHTML);
       });
+      bookListSection.appendChild(booksList);
     }
   }
 }
