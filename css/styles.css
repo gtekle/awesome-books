@@ -49,13 +49,13 @@ ul {
   align-items: center;
 }
 
-.nav-item + .nav-item {
-  border-left: 2px solid black;
-}
-
 .nav-item {
   padding: 0 8px;
   text-align: center;
+}
+
+.nav-item + .nav-item {
+  border-left: 2px solid black;
 }
 
 .nav-item a:hover {
@@ -73,7 +73,7 @@ ul {
 }
 
 #main {
-  min-height: calc(100vh - 16vh) ;
+  min-height: calc(100vh - 110px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -197,8 +197,7 @@ ul {
   display: none;
 }
 
-@media screen and (max-width: 400px){
-
+@media screen and (max-width: 400px) {
   #header {
     justify-content: center;
   }
